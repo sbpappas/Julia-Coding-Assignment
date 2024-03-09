@@ -8,36 +8,46 @@ sh = xf["Sheet1"]
 sh[:]
 
 information = String[]
-print("Welcome to Trinity University. Please enter your first and last name.\n")
-name = readline()
-name = split(name, " ") #shadows
-first = name[1] 
-surname = name[2]
-push!(information, first)
-push!(information, surname)
 
-print("What is your phone number? \nPlease enter it in this format: ###-###-#### \n")
-phone = readline()
-phoneRegex = r"^\d{3}-\d{3}-\d{4}$"
-function isValidPhoneNumber(input::AbstractString)
-    #println(occursin(phoneRegex, input))
-    return occursin(phoneRegex, input)
-end
+addEntries = true
 
-keepAsking = true
-if isValidPhoneNumber(phone) == false
-    while keepAsking == true   
-        if isValidPhoneNumber(phone) == false
-            print("OOPS! \nPlease enter your number it in THIS format: ###-###-#### \n")
-            phone = readline()
-        else 
-            keepAsking == false
-            print(phone)
-            #didn't work having this here: push!(information, phone)
+while addEntries == true
+    print("Welcome to Trinity University. Please enter your first and last name.\n")
+    name = readline()
+    name = split(name, " ") #shadows
+    first = name[1] 
+    surname = name[2]
+    push!(information, first)
+    push!(information, surname)
+
+    print("What is your phone number? \nPlease enter it in this format: ###-###-#### \n")
+    phone = readline()
+    phoneRegex = r"^\d{3}-\d{3}-\d{4}$"
+    function isValidPhoneNumber(input::AbstractString)
+        #println(occursin(phoneRegex, input))
+        return occursin(phoneRegex, input)
+    end
+
+    keepAsking = true
+    if isValidPhoneNumber(phone) == false
+        while keepAsking == true   
+            if isValidPhoneNumber(phone) == false
+                print("OOPS! \nPlease enter your number it in THIS format: ###-###-#### \n")
+                phone = readline()
+            else 
+                keepAsking == false
+                print(phone)
+                #didn't work having this here: push!(information, phone)
+            end
         end
     end
+    push!(information, phone)
+    println("\n\nDo you want to add another person? \nPress 'y' to do so or any other character to stop here.\n")
+    response = readline()
+    if response == "y" 
+        addEntries = false
+    end
 end
-push!(information, phone)
 
 XLSX.openxlsx("infoTable.xlsx", mode="rw") do xf 
     sheet = xf[1] 
