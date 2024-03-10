@@ -8,7 +8,7 @@ sh = xf["Sheet1"]
 sh[:]
 
 information = String[]
-
+people = 0
 addEntries = true
 
 while addEntries == true
@@ -36,17 +36,19 @@ while addEntries == true
                 phone = readline()
             else 
                 keepAsking == false
-                print(phone)
+                #print(phone)
                 #didn't work having this here: push!(information, phone)
             end
         end
     end
     push!(information, phone)
-    println("\n\nDo you want to add another person? \nPress 'y' to do so or any other character to stop here.\n")
+    global people += 1
+    println("\n\nDo you want to add another person? \nPress 'y' to do so or any other character to stop here.")
     response = readline()
-    if response == "y" 
-        addEntries = false
+    if response != "y"
+        global addEntries = false
     end
+    #println(addEntries)
 end
 
 XLSX.openxlsx("infoTable.xlsx", mode="rw") do xf 
@@ -54,7 +56,7 @@ XLSX.openxlsx("infoTable.xlsx", mode="rw") do xf
     sheet["A1"] = "First Name"  
     sheet["B1"] = "Last Name"  
     sheet["C1"] = "Phone Number" 
-    letter = "F"
+    #letter = "F"
     for i in 1:length(information)
         if i%3 == 0
             letter = "C"
@@ -66,9 +68,11 @@ XLSX.openxlsx("infoTable.xlsx", mode="rw") do xf
         #map index to letter
         #convert i to string
         j = string(i)
-        spot = letter*"2"
-        print(information)
+        spot = letter*(string(people+1))
         sheet[spot] = information[i]
+        if i %3 == 0
+            global people -=1
+        end
     end
 end
 
