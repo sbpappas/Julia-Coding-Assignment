@@ -10,6 +10,7 @@ sh[:]
 information = String[]
 people = 0
 addEntries = true
+keepAsking = true
 
 while addEntries == true
     print("Welcome to Trinity University. Please enter your first and last name.\n")
@@ -28,16 +29,16 @@ while addEntries == true
         return occursin(phoneRegex, input)
     end
 
-    keepAsking = true
+    
     if isValidPhoneNumber(phone) == false
         while keepAsking == true   
             if isValidPhoneNumber(phone) == false
                 print("OOPS! \nPlease enter your number it in THIS format: ###-###-#### \n")
                 phone = readline()
             else 
-                keepAsking == false
-                #print(phone)
-                #didn't work having this here: push!(information, phone)
+                keepAsking == false # THIS IS STILL MAKING AN ERROR???? 
+                # does not reference the global variable, even if I put the global key word
+                
             end
         end
     end
